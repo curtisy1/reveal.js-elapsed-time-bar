@@ -1,21 +1,28 @@
-var ElapsedTimeBar = {
+(function (window, document, factory) {
+	if (typeof exports === 'object') {
+	  module.exports = factory;
+	}
+	else {
+	  window.ElapsedTimeBar = factory(window, document, window.Reveal);
+	}
+  })(window, document, function (window, document, Reveal) {
   // default value
-  barColor: 'rgb(200,0,0)',
-  pausedBarColor: 'rgba(200,0,0,.6)',
+  barColor: 'rgb(200,0,0)';
+  pausedBarColor: 'rgba(200,0,0,.6)';
 
-  isPaused: false,
-  isFinished: false,
+  isPaused: false;
+  isFinished: false;
 
-  allottedTime: null,
-  timeProgressBar: null,
-  startTime: null,
-  pauseTime: null,
-  pauseTimeDuration: 0,
+  allottedTime: null;
+  timeProgressBar: null;
+  startTime: null;
+  pauseTime: null;
+  pauseTimeDuration: 0;
 
   /**
    * initialize elements
    */
-  handleReady() {
+  function handleReady() {
     var config = Reveal.getConfig();
 
     // activate this plugin if config.allottedTime exists.
@@ -70,12 +77,12 @@ var ElapsedTimeBar = {
 
     // start timer
     this.start(config.allottedTime);
-  },
+  }
 
   /**
    * update repeatedly using requestAnimationFrame.
    */
-  loop() {
+  function loop() {
     if (this.isPaused) return;
     var now = +new Date();
     var elapsedTime = now - this.startTime - this.pauseTimeDuration;
@@ -86,25 +93,25 @@ var ElapsedTimeBar = {
       this.timeProgressBar.style.width = elapsedTime / this.allottedTime * 100 + '%';
       requestAnimationFrame(this.loop.bind(this));
     }
-  },
+  }
 
   /**
    * set color of progress bar
    */
-  setBarColor() {
+  function setBarColor() {
     if (this.isPaused) {
       this.timeProgressBar.style.backgroundColor = this.pausedBarColor;
     } else {
       this.timeProgressBar.style.backgroundColor = this.barColor;
     }
-  },
+  }
 
   /**
    * start(reset) timer with new allotted time.
    * @param {number} allottedTime
    * @param {number} [elapsedTime=0]
    */
-  start(allottedTime, elapsedTime = 0) {
+  function start(allottedTime, elapsedTime = 0) {
     this.isFinished = false;
     this.isPaused = false;
     this.allottedTime = allottedTime;
@@ -112,20 +119,20 @@ var ElapsedTimeBar = {
     this.pauseTimeDuration = 0;
     this.setBarColor();
     this.loop();
-  },
+  }
 
-  reset() {
+  function reset() {
     this.start(this.allottedTime);
-  },
+  }
 
-  pause() {
+  function pause() {
     if (this.isPaused) return;
     this.isPaused = true;
     this.pauseTime = +new Date();
     this.setBarColor();
-  },
+  }
 
-  resume() {
+  function resume() {
     if (!this.isPaused) return;
 
     // add paused time duration
@@ -135,10 +142,10 @@ var ElapsedTimeBar = {
     this.setBarColor();
     this.loop();
   }
-};
-
-if (Reveal.isReady()) {
-  ElapsedTimeBar.handleReady();
-} else {
-  Reveal.addEventListener('ready', () => ElapsedTimeBar.handleReady());
-}
+  
+  if (Reveal.isReady()) {
+    ElapsedTimeBar.handleReady();
+  } else {
+    Reveal.addEventListener('ready', () => ElapsedTimeBar.handleReady());
+  }
+});
