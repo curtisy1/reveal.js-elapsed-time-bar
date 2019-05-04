@@ -148,4 +148,6 @@
   } else {
     Reveal.addEventListener('ready', () => ElapsedTimeBar.handleReady());
   }
+
+  return module;
 });

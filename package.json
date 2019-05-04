@@ -1,6 +1,6 @@
 {
   "name": "reveal-elapsed-time-bar",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "A Reveal.js plugin adding progress bar of elapsed time.",
   "homepage": "https://github.com/tkrkt/reveal.js-elapsed-time-bar",
   "repository": {
